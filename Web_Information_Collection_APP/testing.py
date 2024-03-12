@@ -1,7 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+import numpy as np
 from urllib.parse import urlparse, urljoin
 import os
+from collections import Counter
 import jieba.posseg as pseg
 
 news_link = "https://www.bbc.com/news/world-us-canada-68192722"  # news
@@ -26,7 +28,6 @@ CXXXX采用了一种先进的连续可变设计，可以根据发动机负载和
 2.2比例电磁阀
 比例电磁阀是控制机油泵输出的关键组件之一。它根据来自发动机控制器的指令，调节机油泵的工作状态，以满足当前发动机工况下的机油需求。
 比例电磁阀具有高精度和快速响应的特性。确保了机油泵输出的稳定性和准确性。
-
 2.3传感器
 CXXXX子系统还配备了多个传感器，用于实时监测发动机的运行状态。其中包括机油压力、 
 传感器、机油温度传感器等，这些传感器可以提供给发动机控制器关键的工作参数，帮助调整机油泵的工作状态。
@@ -58,6 +59,12 @@ def get_txt_from_link(url):
 def jieba_test(text):
     words = pseg.cut(text)
     words_array = [word for word in words]
-    print(words_array)
+    split_txt_array = [word for word, flag in words_array if flag != 'x']
+    split_txt = ' '.join(split_txt_array)
+    counter = Counter(split_txt_array)
+    print(counter)
+    return split_txt_array, split_txt
 
-jieba_test(txt_sample)
+
+test_txt_array, test_txt = jieba_test(txt_sample)
+# print(test_txt_array)
